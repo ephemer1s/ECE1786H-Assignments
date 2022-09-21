@@ -22,6 +22,16 @@
   2. Each words in the list certainly seems to match the requirement to be similar to the original word.
   3. The gap between numerical scores are slightly bigger using ED than using CosSim. But I don't think this make ED a more accurate metric. Because using ED you get score in $[0, +\infin)$ while using CosSim you get $[-1, 1]$
 
-  
 
-  
+
+### S1.3 
+
+In `A1P1_4.py`, I choose to convert cities to their countries. The result is as the following table shows.
+
+| Cities | Result | Cities | Result |
+| ------ | ------ | ------ | ------ |
+|        |        |        |        |
+|        |        |        |        |
+|        |        |        |        |
+|        |        |        |        |
+|        |        |        |        |
