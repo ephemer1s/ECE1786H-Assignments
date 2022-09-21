@@ -19,15 +19,13 @@ def print_closest_words(vec, n):
         print(glove.itos[idx], "\t%5.2f" % difference)
         
         
-def print_closest_cosine_words(vec, n):
+def print_closest_cosine_words(vec:str, n:int):
     '''
     print out N-most similar word using cosine similarity
     '''
-    dists = [torch.cosine_similarity(i.unsqueeze(0), vec.unsqueeze(0)) for i in glove.vectors]
-    dists = numpy.array(dists)
-    lst = sorted(enumerate(numpy.array(dists)), key=lambda x: x[1])
-    
-    for idx, difference in lst[-2:-n-2:-1]:
+    dists = torch.cosine_similarity(glove.vectors, vec.unsqueeze(0))
+    lst = sorted(enumerate(dists.numpy()), key=lambda x: x[1])
+    for idx, difference in lst[:-n-1:-1]:
         print(glove.itos[idx], "\t%5.2f" % difference)
         
 
