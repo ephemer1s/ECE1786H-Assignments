@@ -2,7 +2,7 @@
 
 ## Section 1
 
-### S1.2
+### Q1.2
 
 Provide a table that compares the 10-most cosine-similar words to the word ‘dog’, in order, alongside to the 10 closest words computed using euclidean distance. 
 
@@ -24,7 +24,7 @@ No. The result above does not provide enough evidence of one metric better than 
 
 
 
-### S1.3 
+### Q1.3 
 
 In `A1P1_4.py`, I choose to convert cities to their countries. The result is as the following table shows.
 
@@ -38,13 +38,13 @@ In `A1P1_4.py`, I choose to convert cities to their countries. The result is as 
 
 The pattern $athens - city + nation = greece$ is very precise to most of the city in the list while using CosSim. We can confirm that the quality of the result is better than expected: it gives "USSR" for "Leningrad". However, there are some anomalies. For "Washington", "U.S." is on the 5th place in the list. I think the reason is the other meanings of it weight more than "Washington D.C."
 
-### S1.4
+### Q1.4
 
 I think this may support that vectors have bias in ethics of origin, but the evidence is not very strong. As I haven't found any article mentioning this.
 
 ![image-20220920214144538](Report.assets/image-20220920214144538.png)
 
-### S1.5
+### Q1.5
 
 How does the euclidean difference change between the various words in the notebook when switching from d=50 to d=300? 
 
@@ -54,7 +54,7 @@ Does the ordering of nearness change?
 
 Is it clear that the larger size vectors give better results - why or why not?
 
-### S1.6
+### Q1.6
 
 State any changes that you see in the Bias section of the notebook.
 
@@ -69,3 +69,36 @@ State any changes that you see in the Bias section of the notebook.
 
 
 ## Section 3
+
+### Q3.1
+
+three pairs of words that this corpora implies have similar or related meanings.
+
+* rub - hold
+* a - the
+* cat - dog
+
+### Q3.2
+
+Which is the most frequent word in the corpus, and the least frequent word? 
+
+* 'and', with the frequency of 160
+* 'I', with the frequency of 80
+
+What purpose do the v2i and i2v functions serve?
+
+They are the dictionaries that converts vectors to indices (v2i) and reverts (i2v).
+
+### Q3.3
+
+![image-20220923135436632](Report.assets/image-20220923135436632.png)
+
+My function converts the text list and outputs the center word and context in the window separately.
+
+### Q3.4
+
+What is the total number of parameters in this model with an embedding size of 2 - counting all the weights and biases?
+
+$n_{params}=V\times E\times 2 = 11\times2\times2=44$ . V is the vocabulary size, E is the embedding size. Multiple by 2 since there are 2 layers which have the same shape.
+
+### Q3.5
