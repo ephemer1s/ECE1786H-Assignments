@@ -46,7 +46,7 @@ I think this may support that vectors have bias in ethics of origin, but the evi
 
 ### Q1.5
 
-How does the euclidean difference change between the various words in the notebook when switching from d=50 to d=300? 
+How does the Euclidean difference change between the various words in the notebook when switching from d=50 to d=300? 
 
 How does the cosine similarity change? 
 
@@ -102,3 +102,36 @@ What is the total number of parameters in this model with an embedding size of 2
 $n_{params}=V\times E\times 2 = 11\times2\times2=44$ . V is the vocabulary size, E is the embedding size. Multiple by 2 since there are 2 layers which have the same shape.
 
 ### Q3.5
+
+learning rate = 0.002
+
+Training and Validation Curve:
+
+![image-20220923170034390](Report.assets/image-20220923170034390.png)
+
+apparent success (or lack thereof) that these curves suggest:
+
+There might be a slight portion of underfitting, as the validation loss is always higher than training loss when they come to their convergence.
+
+### Q3.6
+
+Do the results make sense, and confirm your choices from part 1 of this Section? 
+
+What would happen when the window size is too large? 
+
+At what value would window become too large for this corpus?
+
+### Q3.7
+
+Run the training sequence twice - and observe whether the results are identical or not.
+
+They are not, so we need to use seeds to provide more stable training for comparison.
+
+## Section 4
+
+### Q4.1
+
+Give a 3 sentence summary of the subject of the document.
+
+### Q4.2
+
