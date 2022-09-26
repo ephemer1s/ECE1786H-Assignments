@@ -236,6 +236,10 @@ Of those top 20 most frequent words, which one(s) are unique to the subject of t
 
 ### Q4.4
 
+How many total examples were created?
+
+453632 examples.
+
 ### Q4.5
 
 ### Q4.6
