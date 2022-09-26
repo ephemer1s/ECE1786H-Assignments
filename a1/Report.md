@@ -174,11 +174,11 @@ $n_{params}=V\times E\times 2 = 11\times2\times2=44$ . V is the vocabulary size,
 
 ### Q3.5
 
-learning rate = 0.002
+learning rate = 4e-3
 
 Training and Validation Curve:
 
-![image-20220923170034390](Report.assets/image-20220923170034390.png)
+![image-20220926153059932](Report.assets/image-20220926153059932.png)
 
 apparent success (or lack thereof) that these curves suggest:
 
@@ -188,15 +188,19 @@ There might be a slight portion of underfitting, as the validation loss is alway
 
 For your best learning rate, display each of the embeddings in a 2-dimensional plot using Matplotlib.
 
-
+![image-20220926154103067](Report.assets/image-20220926154103067.png)
 
 Do the results make sense, and confirm your choices from part 1 of this Section? 
+
+Yes. The result shows exactly the pair of 'a' - 'the', 'hold' - 'rub', 'she' - 'he' and 'dog' - 'cat'.
 
 
 
 What would happen when the window size is too large? 
 
 When the window size is too large, more generalization will be added to the model, and each word are paired with almost all other words in the sentences, causing the reduction of the model's performance.
+
+
 
 At what value would window become too large for this corpus?
 
@@ -239,10 +243,6 @@ Of those top 20 most frequent words, which one(s) are unique to the subject of t
 How many total examples were created?
 
 453632 examples.
-
-### Q4.5
-
-### Q4.6
 
 ### Q4.7
 
