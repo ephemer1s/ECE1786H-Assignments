@@ -23,6 +23,6 @@ class SGNS(torch.nn.Module):
         
         logit = torch.bmm(target_embedding.unsqueeze(1), center_embedding.unsqueeze(2))
         logit = logit.squeeze().reshape([-1])
-        logit = torch.sigmoid(logit)
+        # logit = torch.sigmoid(logit)
         
         return logit
