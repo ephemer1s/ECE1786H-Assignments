@@ -16,6 +16,9 @@ def train_sgns(textlist, w2i, window=5, embedding_size=8):
     # textlist: a list of strings
     np.random.seed(42)
     torch.manual_seed(42)
+    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+    print(device)
+    
     # Create Training Data 
     X, T, Y = tokenize_and_preprocess_text(textlist, w2i, window)
     X, T, Y = np.array(X), np.array(T), np.array(Y)
@@ -23,18 +26,16 @@ def train_sgns(textlist, w2i, window=5, embedding_size=8):
     # Split the training data
     X_train, X_test, T_train, T_test, Y_train, Y_test = train_test_split(X, T, Y, test_size=0.2, random_state=42)
     print(X_train.shape, X_test.shape, T_train.shape, T_test.shape, Y_train.shape, Y_test.shape)
-    X_train = torch.from_numpy(X_train)
-    X_test = torch.from_numpy(X_test)
-    T_train = torch.from_numpy(T_train)
-    T_test = torch.from_numpy(T_test)
-    Y_train = torch.from_numpy(Y_train).float()
-    Y_test = torch.from_numpy(Y_test).float()
+    X_train = torch.from_numpy(X_train).to(device)
+    X_test = torch.from_numpy(X_test).to(device)
+    T_train = torch.from_numpy(T_train).to(device)
+    T_test = torch.from_numpy(T_test).to(device)
+    Y_train = torch.from_numpy(Y_train).float().to(device)
+    Y_test = torch.from_numpy(Y_test).float().to(device)
     # instantiate the network & set up the optimizer
 
     model = SGNS(vocab_size=len(w2i.keys()), embedding_size=embedding_size)
-    # device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-    # device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-    # print(device)
+    model = model.to(device)
 
     lr = 5e-4
     epochs = 30
@@ -56,7 +57,7 @@ def train_sgns(textlist, w2i, window=5, embedding_size=8):
     for epoch in range(epochs):
         epoch_loss = 0
         for center, target, label in zip(centers, targets, labels):
-            center, target, label = center, target, label
+            center, target, label = center.to(device), target.to(device), label.to(device)
             optimizer.zero_grad()
             logits = model(x=center, t=target) # forward
             loss = loss_fn(logits, label)
