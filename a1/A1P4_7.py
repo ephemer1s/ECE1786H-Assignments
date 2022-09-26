@@ -1,6 +1,8 @@
 import numpy as np
 import torch
 from nltk.tokenize import sent_tokenize
+import nltk
+nltk.download('punkt')
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm  # For progress bars
 import matplotlib.pyplot as plt
@@ -21,13 +23,18 @@ def train_sgns(textlist, w2i, window=5, embedding_size=8):
     # Split the training data
     X_train, X_test, T_train, T_test, Y_train, Y_test = train_test_split(X, T, Y, test_size=0.2, random_state=42)
     print(X_train.shape, X_test.shape, T_train.shape, T_test.shape, Y_train.shape, Y_test.shape)
-
+    X_train = torch.from_numpy(X_train)
+    X_test = torch.from_numpy(X_test)
+    T_train = torch.from_numpy(T_train)
+    T_test = torch.from_numpy(T_test)
+    Y_train = torch.from_numpy(Y_train).float()
+    Y_test = torch.from_numpy(Y_test).float()
     # instantiate the network & set up the optimizer
 
     model = SGNS(vocab_size=len(w2i.keys()), embedding_size=embedding_size)
-    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-    print(device)
-    model.to(device)
+    # device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+    # device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+    # print(device)
 
     lr = 5e-4
     epochs = 30
@@ -37,9 +44,9 @@ def train_sgns(textlist, w2i, window=5, embedding_size=8):
     optimizer = torch.optim.Adam(params=model.parameters(), lr=lr)
 
     # training loop
-    centers = torch.from_numpy(X_train).split(bs)
-    targets = torch.from_numpy(T_train).split(bs)
-    labels = torch.from_numpy(Y_train).float().split(bs)
+    centers = X_train.split(bs)
+    targets = T_train.split(bs)
+    labels = Y_train.split(bs)
 
     progress_bar = tqdm(range(epochs * len(centers)))
 
@@ -49,7 +56,7 @@ def train_sgns(textlist, w2i, window=5, embedding_size=8):
     for epoch in range(epochs):
         epoch_loss = 0
         for center, target, label in zip(centers, targets, labels):
-            center, target, label = center.to(device), target.to(device), label.to(device)
+            center, target, label = center, target, label
             optimizer.zero_grad()
             logits = model(x=center, t=target) # forward
             loss = loss_fn(logits, label)
@@ -58,8 +65,8 @@ def train_sgns(textlist, w2i, window=5, embedding_size=8):
             optimizer.step()
             progress_bar.update(1)
 
-        val_pred = model(x=torch.from_numpy(X_test), t=torch.from_numpy(T_test))
-        val_loss = loss_fn(val_pred, torch.from_numpy(Y_test).float()).item()
+        val_pred = model(x=X_test, t=T_test)
+        val_loss = loss_fn(val_pred, Y_test).item()
 
         epoch_loss /= len(centers)
         running_loss.append(epoch_loss)
@@ -69,7 +76,7 @@ def train_sgns(textlist, w2i, window=5, embedding_size=8):
 
 
 if __name__ == '__main__':
-    with open('LargerCorpus.txt') as f:
+    with open('LargerCorpus.txt', encoding='utf-8') as f:
         txt = f.read()
     filtered_lemmas, w2i, i2w, vocab = prepare_texts(txt)
     textlist = sent_tokenize(txt)
