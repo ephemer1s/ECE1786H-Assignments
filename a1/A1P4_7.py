@@ -41,7 +41,7 @@ def train_sgns(textlist, w2i, window=5, embedding_size=8):
     epochs = 30
     bs = 4
     n_workers = 1
-    loss_fn = torch.nn.BCELoss()
+    loss_fn = torch.nn.BCEWithLogitsLoss()
     optimizer = torch.optim.Adam(params=model.parameters(), lr=lr)
 
     # training loop
