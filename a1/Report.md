@@ -2,7 +2,7 @@
 
 ## Section 1
 
-### Q1.2
+### Question 1.2
 
 Provide a table that compares the 10-most cosine-similar words to the word ‘dog’, in order, alongside to the 10 closest words computed using euclidean distance. 
 
@@ -28,7 +28,7 @@ No. The result above does not provide enough evidence of one metric better than 
 
 
 
-### Q1.3 
+### Question 1.3 
 
 In `A1P1_4.py`, I choose to convert cities to their countries. The result is as the following table shows.
 
@@ -42,13 +42,13 @@ In `A1P1_4.py`, I choose to convert cities to their countries. The result is as 
 
 The pattern $athens - city + nation = greece$ is very precise to most of the city in the list while using CosSim. We can confirm that the quality of the result is better than expected: it gives "USSR" for "Leningrad". However, there are some anomalies. For "Washington", "U.S." is on the 5th place in the list. I think the reason is the other meanings of it weight more than "Washington D.C."
 
-### Q1.4
+### Question 1.4
 
 I think this may support that vectors have bias in ethics of origin, but the evidence is not very strong. As I haven't found any article mentioning this.
 
 ![image-20220920214144538](Report.assets/image-20220920214144538.png)
 
-### Q1.5
+### Question 1.5
 
 How does the Euclidean difference change between the various words in the notebook when switching from d=50 to d=300? 
 
@@ -74,7 +74,7 @@ Yes. In my opinion, the larger size of vectors will guarantee more dimensions to
 
 
 
-### Q1.6
+### Question 1.6
 
 State any changes that you see in the Bias section of the notebook.
 
@@ -86,7 +86,7 @@ The words in bias section does not show as much bias as it is when dim=50. For e
 
 ## Section 2
 
-### Q2.2
+### Question 2.2
 
  Compute the similarity:
 
@@ -110,7 +110,7 @@ What is the apparent difference between method 1 and 2?
 
 * From the algorithm, method 2 average the embedded colors first, then calculate the similarity of the averaged colors to the given word. And the averaged colors could actually represent none of the colors in the category rather than being a general embedded concept of the category. 
 
-### Q2.3
+### Question 2.3
 
 Build-up words of the *temperature* category: molten, hot, warm, cold, celcius, freeze.
 
@@ -131,7 +131,7 @@ Results:
 
 The results shows the ability of the category to recognize the word with some specific "temperature" inside, e.g. snow, winter, etc. The results are not as clear as the color table. Because when talking temperature, the word in the category are too linear and somehow lacks diversity. If a word have high cosine similarity with "warm", then it should somehow have low similarity with "cold". Then the averages with method 1 are a little bit ambiguous.
 
-### Q2.4
+### Question 2.4
 
 ![image-20220926110355751](Report.assets/image-20220926110355751.png)
 
@@ -141,7 +141,7 @@ Yes. 'sun' and 'moon' are close to each other though there are 'glow', ' cow' in
 
 ## Section 3
 
-### Q3.1
+### Question 3.1
 
 three pairs of words that this corpora implies have similar or related meanings.
 
@@ -149,7 +149,7 @@ three pairs of words that this corpora implies have similar or related meanings.
 * a - the
 * cat - dog
 
-### Q3.2
+### Question 3.2
 
 Which is the most frequent word in the corpus, and the least frequent word? 
 
@@ -160,19 +160,19 @@ What purpose do the v2i and i2v functions serve?
 
 They are the dictionaries that converts vectors to indices (v2i) and reverts (i2v).
 
-### Q3.3
+### Question 3.3
 
 ![image-20220923135436632](Report.assets/image-20220923135436632.png)
 
 My function converts the text list and outputs the center word and context in the window separately.
 
-### Q3.4
+### Question 3.4
 
 What is the total number of parameters in this model with an embedding size of 2 - counting all the weights and biases?
 
 $n_{params}=V\times E\times 2 = 11\times2\times2=44$ . V is the vocabulary size, E is the embedding size. Multiple by 2 since there are 2 layers which have the same shape.
 
-### Q3.5
+### Question 3.5
 
 learning rate = 4e-3
 
@@ -184,7 +184,7 @@ apparent success (or lack thereof) that these curves suggest:
 
 There might be a slight portion of underfitting, as the validation loss is always higher than training loss when they come to their convergence.
 
-### Q3.6
+### Question 3.6
 
 For your best learning rate, display each of the embeddings in a 2-dimensional plot using Matplotlib.
 
@@ -208,19 +208,19 @@ Window larger than 5.
 
 ## Section 4
 
-### Q4.1
+### Question 4.1
 
 Give a 3 sentence summary of the subject of the document.
 
 The history of coin production in America. The history of the coin in the ancient world. The process and economical data of the Mints in America.0
 
-### Q4.2
+### Question 4.2
 
 What are the functional differences between this code and that of the same function in Section 3?
 
 It takes more complicated inputs that has many symbols and numbers to process. After the vocabulary is created, the function also filter the words not included in vocabulary by assigning them "\<oov>".
 
-### Q4.3
+### Question 4.3
 
 the number of words in the text:
 
@@ -238,19 +238,21 @@ Of those top 20 most frequent words, which one(s) are unique to the subject of t
 
 'coin'
 
-### Q4.4
+### Question 4.4
 
 How many total examples were created?
 
 453632 examples.
 
-### Q4.7
+### Question 4.7
 
 ![image-20220926190151721](Report.assets/image-20220926190151721.png)
 
-I can't say the training was good, but it seems that the model works well in Q4.8.
+I can't say the training was good, but it seems that the model works well in Q4.8. 
 
-### Q4.8
+more info: Learning rate = 4e-5, loss = BCEWithLogitsLoss()
+
+### Question 4.8
 
 ![image-20220926185747986](Report.assets/image-20220926185747986.png)
 
