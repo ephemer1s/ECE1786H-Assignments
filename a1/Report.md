@@ -10,9 +10,13 @@ Provide a table that compares the 10-most cosine-similar words to the word ‘do
 
 (Left: CosSim Right: ED)
 
+
+
 Give the same kind of table for the word ‘computer.’ 
 
 ![](Report.assets/image-20220919003120175.png)![](Report.assets/image-20220919003132648.png)
+
+
 
 Does one of the metrics (cosine similarity or euclidean distance) seem to be better than the other? 
 
@@ -48,17 +52,35 @@ I think this may support that vectors have bias in ethics of origin, but the evi
 
 How does the Euclidean difference change between the various words in the notebook when switching from d=50 to d=300? 
 
+The Euclidean difference grows larger as the dimension grows.
+
+
+
 How does the cosine similarity change? 
+
+The cosine similarity grows smaller as the dimension grows.
+
+
 
 Does the ordering of nearness change? 
 
+It changes a little bit. Some word remain in the list but some not.
+
+
+
 Is it clear that the larger size vectors give better results - why or why not?
+
+Yes. In my opinion, the larger size of vectors will guarantee more dimensions to measure the difference between words, which means more precisely the words are mapped into the latent codes.
+
+
 
 ### Q1.6
 
 State any changes that you see in the Bias section of the notebook.
 
+The words in bias section does not show as much bias as it is when dim=50. For example, $programmer \mp man \pm woman$ will be still programmer this time.
 
+![image-20220925201252678](Report.assets/image-20220925201252678.png)
 
 
 
@@ -132,6 +154,8 @@ They are not, so we need to use seeds to provide more stable training for compar
 ### Q4.1
 
 Give a 3 sentence summary of the subject of the document.
+
+The history of coin production in America. The history of the coin in the ancient world. The process and economical data of the Mints in America.0
 
 ### Q4.2
 
