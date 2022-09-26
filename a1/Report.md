@@ -246,4 +246,12 @@ How many total examples were created?
 
 ### Q4.7
 
+![image-20220926190151721](Report.assets/image-20220926190151721.png)
+
+I can't say the training was good, but it seems that the model works well in Q4.8.
+
 ### Q4.8
+
+![image-20220926185747986](Report.assets/image-20220926185747986.png)
+
+The embedding certainly seemed to work good. 'United' is plotted very closed to 'States'. 'dollar', 'gold', 'metal' are close to each other. However, it is confusing that 'Act' and 'grain' are plotted together far from all the other words.
