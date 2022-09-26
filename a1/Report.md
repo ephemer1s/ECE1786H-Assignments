@@ -86,7 +86,52 @@ The words in bias section does not show as much bias as it is when dim=50. For e
 
 ## Section 2
 
+### Q2.2
 
+ Compute the similarity:
+
+| word       | method(a) | method(b) |
+| ---------- | --------- | --------- |
+| greenhouse | 0.0766    | 0.0949    |
+| sky        | 0.3658    | 0.4601    |
+| grass      | 0.2570    | 0.3221    |
+| purple     | 0.5669    | 0.7124    |
+| scissors   | 0.0942    | 0.1186    |
+| microphone | 0.0736    | 0.0925    |
+| president  | 0.0469    | 0.0588    |
+
+Do the results for each method make sense? Why or why not? 
+
+Yes. The results show that "sky" and "grass" have more color than the other words while "purple" have the most, which match the description in the section.
+
+What is the apparent difference between method 1 and 2?
+
+* From the results, method 2 tend to give a higher cosine similarity result than method 1.
+
+* From the algorithm, method 2 average the embedded colors first, then calculate the similarity of the averaged colors to the given word. And the averaged colors could actually represent none of the colors in the category rather than being a general embedded concept of the category. 
+
+### Q2.3
+
+Build-up words of the *temperature* category: molten, hot, warm, cold, celcius, freeze.
+
+Results:
+
+| word       | method1 | method2 |
+| ---------- | ------- | ------- |
+| sun        | 0.2579  | 0.3245  |
+| snow       | 0.01976 | 0.2486  |
+| ice        | 0.1741  | 0.2194  |
+| winter     | 0.2187  | 0.2752  |
+| warm       | 0.2341  | 0.2942  |
+| fun        | 0.1366  | 0.1711  |
+| news       | 0.0749  | 0.0945  |
+| programmer | -0.0211 | -0.0268 |
+| pc         | 0.0506  | 0.0634  |
+| president  | 0.0469  | 0.0588  |
+
+The results shows the ability of the category to recognize the word with some specific "temperature" inside, e.g. snow, winter, etc. The results are not as clear as the color table. Because when talking temperature, the word in the category are too linear and somehow lacks diversity. If a word have high cosine similarity with "warm", then it should somehow have low similarity with "cold". Then the averages with method 1 are a little bit ambiguous.
+
+### Q2.4
 
 
 
@@ -137,17 +182,21 @@ There might be a slight portion of underfitting, as the validation loss is alway
 
 ### Q3.6
 
+For your best learning rate, display each of the embeddings in a 2-dimensional plot using Matplotlib.
+
+
+
 Do the results make sense, and confirm your choices from part 1 of this Section? 
+
+
 
 What would happen when the window size is too large? 
 
+When the window size is too large, more generalization will be added to the model, and each word are paired with almost all other words in the sentences, causing the reduction of the model's performance.
+
 At what value would window become too large for this corpus?
 
-### Q3.7
-
-Run the training sequence twice - and observe whether the results are identical or not.
-
-They are not, so we need to use seeds to provide more stable training for comparison.
+Window larger than 5.
 
 ## Section 4
 
@@ -159,3 +208,14 @@ The history of coin production in America. The history of the coin in the ancien
 
 ### Q4.2
 
+### Q4.3
+
+### Q4.4
+
+### Q4.5
+
+### Q4.6
+
+### Q4.7
+
+### Q4.8
