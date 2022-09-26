@@ -133,7 +133,11 @@ The results shows the ability of the category to recognize the word with some sp
 
 ### Q2.4
 
+![image-20220926110355751](Report.assets/image-20220926110355751.png)
 
+Do the words that are similar end up being plotted close together? Why or why not?
+
+Yes. 'sun' and 'moon' are close to each other though there are 'glow', ' cow' in between them. 'winter', 'wind', 'rain' are closed to each other. 'heated', 'cool' are closed to each other. This is mainly because in the tradeoff between color and temperature, those words have similar portions.
 
 ## Section 3
 
@@ -208,7 +212,27 @@ The history of coin production in America. The history of the coin in the ancien
 
 ### Q4.2
 
+What are the functional differences between this code and that of the same function in Section 3?
+
+It takes more complicated inputs that has many symbols and numbers to process. After the vocabulary is created, the function also filter the words not included in vocabulary by assigning them "\<oov>".
+
 ### Q4.3
+
+the number of words in the text:
+
+69267 words
+
+the size of the filtered vocabulary:
+
+7359 different words, with total presence 62015 times
+
+the most frequent 20 words in the filtered vocabulary
+
+('the', 5047), ('of', 3438), ('be', 2283), ('and', 1943), ('in', 1588), ('to', 1379), ('a', 1226), ('for', 531), ('as', 518), ('by', 493), ('he', 483), ('with', 471), ('coin', 417), ('this', 387), ('on', 377), ('his', 368), ('which', 346), ('at', 334), ('it', 332), ('from', 326)
+
+Of those top 20 most frequent words, which one(s) are unique to the subject of this particular text?
+
+'coin'
 
 ### Q4.4
 
