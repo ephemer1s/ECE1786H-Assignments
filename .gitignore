@@ -2,5 +2,5 @@
 Report.assets/
 *.pyc
 *.zip
-# __MACOSX/
+__MACOSX/
 
