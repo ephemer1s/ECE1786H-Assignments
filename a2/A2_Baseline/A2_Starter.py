@@ -1,9 +1,5 @@
 
 import torch
-import torchtext
-from torchtext import data
-import torch.optim as optim
-import argparse
 import os
 import pandas as pd
 
@@ -53,47 +49,3 @@ def my_collate_function(batch, device):
         batch_x.append(x_p)
     return torch.stack(batch_x).t().int().to(device), torch.tensor(batch_y).to(device)
 
-
-def main(args):
-    #   fix seed
-    torch.manual_seed(2)
-
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print ("Using device:", device)
-
-    ### 3.3 Processing of the data ###
-    # 3.3.1
-    # The first time you run this will download a 862MB size file to .vector_cache/glove.6B.zip
-    glove = torchtext.vocab.GloVe(name="6B",dim=100) # embedding size = 100
-                                   
-    # 3.3.2
-
-    train_dataset = TextDataset(glove, "train")
-    val_dataset = TextDataset(glove, "validation")
-    test_dataset = TextDataset(glove, "test")
-        
-    # 3.3.3
-    train_dataloader = torch.utils.data.DataLoader(
-        dataset=train_dataset, 
-        batch_size=args.batch_size, 
-        shuffle=False, 
-        collate_fn=lambda batch: my_collate_function(batch, device))
-
-    validation_dataloader = torch.utils.data.DataLoader(
-        dataset=val_dataset, 
-        batch_size=args.batch_size, 
-        shuffle=False, 
-        collate_fn=lambda batch: my_collate_function(batch, device))
-
-    test_dataloader = torch.utils.data.DataLoader(
-        dataset=test_dataset,
-        batch_size=args.batch_size,
-        shuffle=False,
-        collate_fn=lambda batch: my_collate_function(batch, device))
-
-    # Instantiate your model(s) and train them and so on 
-    # We suggest parameterizing the model - k1, n1, k2, n2, and other hyperparameters
-    # so that it is easier to experiment with
-    
-    
-   
