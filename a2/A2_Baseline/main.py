@@ -6,6 +6,7 @@ import argparse
 import os
 from tqdm import tqdm
 from datetime import datetime
+import matplotlib.pyplot as plt
 
 try:
     from A2_Starter import *
@@ -113,5 +114,20 @@ def main(args):
     return model, train_loss, val_loss
 
 
+def draw(tloss, vloss):
+    fig = plt.figure()
+    ax = fig.subplots()
+    ax.plot(train_loss, 'r', label='Training')
+    ax.plot(val_loss, 'b', label='Validation')
+    ax.legend()
+    ax.show()    
+    
+    
 if __name__ == '__main__':
     model, train_loss, val_loss = main(args)
+    
+    fig = plt.figure()
+    ax = fig.subplots()
+    ax.plot(tloss, 'r', label='Training')
+    ax.plot(vloss, 'b', label='Validation')
+    ax.legend()
