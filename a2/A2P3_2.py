@@ -10,9 +10,8 @@ if not os.path.exists('./data/train.tsv'):
     try:
         tsv_file = open('/content/drive/MyDrive/ECE1786/data.tsv')
     except:
-        tsv_file = open('/data/data.tsv')
-    finally:
-        read_tsv = csv.reader(tsv_file, delimiter="\t")
+        tsv_file = open('./data/data.tsv', encoding='utf-8')
+    read_tsv = csv.reader(tsv_file, delimiter="\t")
 
     data = pd.DataFrame(data=[row for row in read_tsv], columns=['text', 'label'])
     data.drop([0], axis=0, inplace=True)
