@@ -16,11 +16,12 @@ except:
     from A2_Baseline.Baseline import Baseline
 
 
-# add args
+# parse args
 parser = argparse.ArgumentParser()
-parser.add_argument("-b", "--batch_size", type=int, default=16)
+parser.add_argument("-bs", "--batch_size", type=int, default=16)
 parser.add_argument("-e", "--epochs", type=int, default=50)
-parser.add_argument("-l", "--learning_rate", type=float, default=1e-3)
+parser.add_argument("-lr", "--learning_rate", type=float, default=1e-3)
+parser.add_argument("-ml", "--max_len", type=int, default=100)
 args = parser.parse_args()
 
 
@@ -46,19 +47,19 @@ def main(args):
         dataset=train_dataset, 
         batch_size=args.batch_size, 
         shuffle=False, 
-        collate_fn=lambda batch: my_collate_function(batch, device))
+        collate_fn=lambda batch: my_collate_function(batch, device, max_len=args.max_len))
 
     validation_dataloader = torch.utils.data.DataLoader(
         dataset=val_dataset, 
         batch_size=args.batch_size, 
         shuffle=False, 
-        collate_fn=lambda batch: my_collate_function(batch, device))
+        collate_fn=lambda batch: my_collate_function(batch, device, max_len=args.max_len))
 
     test_dataloader = torch.utils.data.DataLoader(
         dataset=test_dataset,
         batch_size=args.batch_size,
         shuffle=False,
-        collate_fn=lambda batch: my_collate_function(batch, device))
+        collate_fn=lambda batch: my_collate_function(batch, device, max_len=args.max_len))
 
     # Instantiate your model(s) and train them and so on 
     # We suggest parameterizing the model - k1, n1, k2, n2, and other hyperparameters

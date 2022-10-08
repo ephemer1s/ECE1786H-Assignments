@@ -30,7 +30,7 @@ class TextDataset(torch.utils.data.Dataset):
 # my_collate_function prepares batches
 # it also pads each batch with zeroes.
 
-def my_collate_function(batch, device):
+def my_collate_function(batch, device, max_len):
     # Handle the padding here
     # batch is approximately: [dataset[i] for i in range(0, batch_size)]
     # Since the dataset[i]'s contents is defined in the __getitem__() above, this collate function 
@@ -38,7 +38,7 @@ def my_collate_function(batch, device):
     # Also: collate_function just takes one argument. To pass in additional arguments (e.g., device), 
     # we need to wrap up an anonymous function (using lambda below)
     batch_x, batch_y = [], []
-    max_len = 0
+    # max_len = 0
     for x,y in batch:
         batch_y.append(y)
         max_len = max(max_len, len(x))
