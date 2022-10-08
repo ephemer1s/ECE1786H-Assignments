@@ -83,7 +83,7 @@ def main(args):
             model.train()
             optimizer.zero_grad()
             out = model(X_train)
-            loss = loss_fn(out, Y_train)
+            loss = loss_fn(out, Y_train.float())
             epoch_loss += loss.item()
             loss.backward()
             optimizer.step()
@@ -95,7 +95,7 @@ def main(args):
             model.eval()
             with torch.no_grad():
                 val_pred = model(X_val)
-            loss = loss_fn(val_pred, Y_val).item()
+            loss = loss_fn(val_pred, Y_val.float())#.item()
             epoch_loss += loss.item()
         epoch_loss /= len(validation_dataloader)
         val_loss.append(epoch_loss)
@@ -108,7 +108,7 @@ def main(args):
     timestamp = datetime.now().strftime("%m%d%Y_%H%M%S")
     savedir = './models/Baseline_lr_{}_bs_{}_epochs_{}_{}'.format(
         args.learning_rate, args.batch_size, args.epochs, timestamp)
-    model.save(model.state_dict(), savedir)
+    torch.save(model.state_dict(), savedir)
 
     return model, train_loss, val_loss
 
