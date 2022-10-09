@@ -14,7 +14,7 @@ class Conv2dWordClassifier(nn.Module):
         self.linear_input_size = self.n1 + self.n2      # as per 5.0.6
 
         ### set up neural network
-        self.embedding = nn.Embedding.from_pretrained(vocab.vectors)  # same as Baseline
+        self.embedding = nn.Embedding.from_pretrained(vocab.vectors, freeze=args.freeze_embedding)  # same as Baseline
 
         self.conv1 = nn.Sequential(
             nn.Conv2d(
