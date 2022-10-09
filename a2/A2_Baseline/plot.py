@@ -7,15 +7,17 @@ import matplotlib.pyplot as plt
 def draw_loss(tloss, vloss):
     fig = plt.figure()
     ax = fig.subplots()
-    ax.plot(x=list(range(len(tloss))), y=tloss, color='r', label='Training')
-    ax.plot(x=list(range(len(tloss)))[::2], y=vloss, color='b', label='Validation')
+    ax.plot(list(range(len(tloss))), tloss, color='r', label='Training')
+    ax.plot(list(range(len(tloss)))[::2], vloss, color='b', label='Validation')
     ax.legend()
     ax.set_title('Train loss vs. Val loss')
-    ax.show()
+    plt.savefig('./fig/loss.png')
     return fig
 
 def draw_acc(acc):
     fig = plt.figure()
     ax = fig.subplots()
-    ax.plot(x=list(range(len(acc) * 2))[::2], y=acc, color='b', title='Validation Accuracy')
+    ax.plot(list(range(len(acc) * 2))[::2], acc, color='b')
+    ax.set_title('Validation Accuracy')
+    plt.savefig('./fig/acc.png')
     return fig
