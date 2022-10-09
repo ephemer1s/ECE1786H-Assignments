@@ -27,6 +27,7 @@ parser.add_argument("-lr", "--learning_rate", type=float, default=1e-3)
 parser.add_argument("-ml", "--max_len", type=int, default=0)
 parser.add_argument("-s", "--save_model", type=bool, default=True)
 parser.add_argument("-o", "--overfit_debug", type=bool, default=False)
+parser.add_argument("-b", "--bias", type=bool, default=False)
 args = parser.parse_args()
 
 
@@ -75,7 +76,7 @@ def main(args):
 
     ### 4.3 Training the Baseline Model ###
     # set up the model
-    model = Baseline(glove).to(device)
+    model = Baseline(glove, fc_bias=args.bias).to(device)
 
     # set up hyperparameters
     loss_fn = torch.nn.BCEWithLogitsLoss()
