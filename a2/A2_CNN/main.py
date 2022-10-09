@@ -1,22 +1,19 @@
 import torch
 import torchtext
-# from torchtext import data
-# import torch.optim as optim
 import argparse
 import os
 from tqdm import tqdm
-from datetime import datetime
 
 try:
     from A2_Starter import *
-    from Baseline import Baseline
-    from plot import *
+    from Classifier import Conv2dWordClassifier
+    from utils import *
 except Exception as e: 
     print(e)
     print('trying another import path')
-    from A2_Baseline.A2_Starter import *
-    from A2_Baseline.Baseline import Baseline
-    from A2_Baseline.plot import *
+    from A2_CNN.A2_Starter import *
+    from A2_CNN.Classifier import Conv2dWordClassifier
+    from A2_CNN.utils import *
     print('import successful')
 
 # 4.3 parse args
@@ -24,11 +21,18 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-bs", "--batch_size", type=int, default=16)
 parser.add_argument("-e", "--epochs", type=int, default=50)
 parser.add_argument("-lr", "--learning_rate", type=float, default=1e-3)
-parser.add_argument("-ml", "--max_len", type=int, default=0)
+# parser.add_argument("-ml", "--max_len", type=int, default=0)
 parser.add_argument("-s", "--save_model", type=bool, default=True)
 parser.add_argument("-o", "--overfit_debug", type=bool, default=False)
-parser.add_argument("-b", "--bias", type=bool, default=False)
-args = parser.parse_args()
+# parser.add_argument("-b", "--bias", type=bool, default=False)
+
+# added in 5.2
+parser.add_argument("-k1", "--k1", type=int, default=2)
+parser.add_argument("-n1", "--n1", type=int, default=10)
+parser.add_argument("-k2", "--k2", type=int, default=4)
+parser.add_argument("-n2", "--n2", type=int, default=10)
+parser.add_argument("-f", "--freeze_embedding", type=bool, default=False)
+
 
 
 def main(args):
@@ -76,7 +80,7 @@ def main(args):
 
     ### 4.3 Training the Baseline Model ###
     # set up the model
-    model = Baseline(glove, fc_bias=args.bias).to(device)
+    model = Conv2dWordClassifier(glove, args).to(device)
 
     # set up hyperparameters
     loss_fn = torch.nn.BCEWithLogitsLoss()
@@ -86,7 +90,7 @@ def main(args):
     val_loss = []
     val_acc = []
 
-    # 4.3 training loop
+    # 5.2 training loop, transplanted from 4.3 training loop
     progress_bar = tqdm(range(args.epochs))
     for epoch in range(args.epochs):
 
@@ -94,7 +98,7 @@ def main(args):
         for X_train, Y_train in train_dataloader:  # train
             model.train()
             optimizer.zero_grad()
-            out = model(X_train)
+            out, logit = model(X_train)
             loss = loss_fn(out, Y_train.float())
             epoch_loss += loss.item()
             loss.backward()
@@ -110,13 +114,11 @@ def main(args):
             for X_val, Y_val in validation_dataloader:  # validation
                 model.eval()
                 with torch.no_grad():
-                    val_pred = model(X_val)
-                loss = loss_fn(val_pred, Y_val.float())
+                    out, logit = model(X_val)
+                loss = loss_fn(out, Y_val.float())
                 epoch_loss += loss.item()
                 
-                logit = torch.sigmoid(val_pred)
                 Y_pred = torch.round(logit).long()
-                # print(Y_pred, Y_val)
                 for i in range(args.batch_size):
                     if Y_pred[i] == Y_val[i]:
                         acc += 1
@@ -135,8 +137,7 @@ def main(args):
     test_acc = 0
     for X_test, Y_test in test_dataloader:
         with torch.no_grad():
-            out = model(X_test)
-        logit = torch.sigmoid(out)
+            out, logit = model(X_test)
         Y_pred = torch.round(logit).long()
         for i in range(args.batch_size):
             if Y_pred[i] == Y_test[i]:
@@ -146,12 +147,7 @@ def main(args):
     
     # 4.7 save model
     if args.save_model:
-        if not os.path.exists('./models'):
-            os.mkdir('./models')
-        timestamp = datetime.now().strftime("%m%d%Y_%H%M%S")
-        savedir = './models/model_baseline_lr_{}_bs_{}_epochs_{}_{}.pt'.format(
-            args.learning_rate, args.batch_size, args.epochs, timestamp)
-        torch.save(model.state_dict(), savedir)
+        save_model(model, args)
 
     # 4.5 Draw curves
     if not os.path.exists('./fig'):
@@ -159,11 +155,14 @@ def main(args):
     draw_loss(train_loss, val_loss)
     draw_acc(val_acc)
     
+    # 5.2.1 
+    
     # finally, return model and losses
     return model, train_loss, val_loss, val_acc, test_acc
     
-    
+
     
 if __name__ == '__main__':
+    args = parser.parse_args()
     model, train_loss, val_loss, val_acc, test_acc = main(args)
     
