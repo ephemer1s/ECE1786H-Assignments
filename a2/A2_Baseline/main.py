@@ -11,11 +11,13 @@ try:
     from A2_Starter import *
     from Baseline import Baseline
     from plot import *
-except:
+except Exception as e: 
+    print(e)
+    print('trying another import path')
     from A2_Baseline.A2_Starter import *
     from A2_Baseline.Baseline import Baseline
     from A2_Baseline.plot import *
-
+    print('import successful')
 
 # 4.3 parse args
 parser = argparse.ArgumentParser()
@@ -143,10 +145,19 @@ def main(args):
     test_acc /= len(test_dataset)
     
     # 4.5 Draw curves
-    loss_fig = draw_loss(train_loss, val_loss)
-    acc_fig = draw_acc(val_acc)
-    loss_fig.savefig('./fig/loss.png')
-    acc_fig.savefig('./fig/acc.png')
+    try:
+        loss_fig = draw_loss(train_loss, val_loss)
+        acc_fig = draw_acc(val_acc)
+        loss_fig.savefig('./fig/loss.png')
+        acc_fig.savefig('./fig/acc.png')
+    except Exception as e:
+        print(e)
+        print("training_loss:")
+        print(train_loss)
+        print("validation_loss:")
+        print(val_loss)
+        print("accuracy:")
+        print(val_acc)
     
     # finally, return model and losses
     return model, train_loss, val_loss, val_acc
