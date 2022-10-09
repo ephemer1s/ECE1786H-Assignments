@@ -27,7 +27,11 @@ There should be a folder called A2_Baseline after unzip the file, please put the
 
 * `Baseline.py` - Defines the Baseline model.
 
-* `ext_meaning.py` - Extract the meanings from trained model's linear layer. Which is used in P4.6. Usage: `python ./A2_Baseline/ext_meaning.py`
+* `ext_meaning.py` - Extract the meanings from trained model's linear layer. Which is used in P4.6. 
+
+  Usage: `python ./A2_Baseline/ext_meaning.py`
+
+  **Notes: you should specify which model to extract meaning. Change model path in the script.**
 
 * `main.py` - Function `main(args)` included. Used to train and test the model. Arguments are listed in the following "Parser" section.
 
