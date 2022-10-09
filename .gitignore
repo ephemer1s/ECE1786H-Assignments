@@ -3,6 +3,6 @@ Report.assets/
 *.pyc
 *.zip
 __MACOSX/
-
+models/
 a2/a2v2.pdf
 *.pdf
