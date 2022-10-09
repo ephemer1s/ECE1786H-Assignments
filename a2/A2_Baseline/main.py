@@ -24,7 +24,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-bs", "--batch_size", type=int, default=16)
 parser.add_argument("-e", "--epochs", type=int, default=50)
 parser.add_argument("-lr", "--learning_rate", type=float, default=1e-3)
-parser.add_argument("-ml", "--max_len", type=int, default=100)
+parser.add_argument("-ml", "--max_len", type=int, default=0)
+parser.add_argument("-s", "--save_model", type=bool, default=True)
+parser.add_argument("-o", "--overfit_debug", type=bool, default=False)
 args = parser.parse_args()
 
 
@@ -41,7 +43,10 @@ def main(args):
     glove = torchtext.vocab.GloVe(name="6B",dim=100) # embedding size = 100
                                    
     # 3.3.2
-    train_dataset = TextDataset(glove, split="train")
+    if args.overfit_debug:
+        train_dataset = TextDataset(glove, split="overfit")
+    else:
+        train_dataset = TextDataset(glove, split="train")
     val_dataset = TextDataset(glove, split="validation")
     test_dataset = TextDataset(glove, split="test")
         
@@ -108,8 +113,9 @@ def main(args):
                 loss = loss_fn(val_pred, Y_val.float())
                 epoch_loss += loss.item()
                 
-                logit = torch.sigmoid(out)
+                logit = torch.sigmoid(val_pred)
                 Y_pred = torch.round(logit).long()
+                # print(Y_pred, Y_val)
                 for i in range(args.batch_size):
                     if Y_pred[i] == Y_val[i]:
                         acc += 1
@@ -123,14 +129,6 @@ def main(args):
         # finish epoch
         progress_bar.update(1)
  
-    # 4.7 save model
-    if not os.path.exists('./models'):
-        os.mkdir('./models')
-    timestamp = datetime.now().strftime("%m%d%Y_%H%M%S")
-    savedir = './models/model_baseline_lr_{}_bs_{}_epochs_{}_{}.pt'.format(
-        args.learning_rate, args.batch_size, args.epochs, timestamp)
-    torch.save(model.state_dict(), savedir)
-
     # 4.5 Evaluation loop
     model.eval()
     test_acc = 0
@@ -143,27 +141,28 @@ def main(args):
             if Y_pred[i] == Y_test[i]:
                 test_acc += 1
     test_acc /= len(test_dataset)
+    print("test accuracy: {}".format(test_acc))
     
+    # 4.7 save model
+    if args.save_model:
+        if not os.path.exists('./models'):
+            os.mkdir('./models')
+        timestamp = datetime.now().strftime("%m%d%Y_%H%M%S")
+        savedir = './models/model_baseline_lr_{}_bs_{}_epochs_{}_{}.pt'.format(
+            args.learning_rate, args.batch_size, args.epochs, timestamp)
+        torch.save(model.state_dict(), savedir)
+
     # 4.5 Draw curves
-    try:
-        loss_fig = draw_loss(train_loss, val_loss)
-        acc_fig = draw_acc(val_acc)
-        loss_fig.savefig('./fig/loss.png')
-        acc_fig.savefig('./fig/acc.png')
-    except Exception as e:
-        print(e)
-        print("training_loss:")
-        print(train_loss)
-        print("validation_loss:")
-        print(val_loss)
-        print("accuracy:")
-        print(val_acc)
+    if not os.path.exists('./fig'):
+        os.mkdir('./fig')
+    draw_loss(train_loss, val_loss)
+    draw_acc(val_acc)
     
     # finally, return model and losses
-    return model, train_loss, val_loss, val_acc
+    return model, train_loss, val_loss, val_acc, test_acc
     
     
     
 if __name__ == '__main__':
-    model, train_loss, val_loss, val_acc = main(args)
+    model, train_loss, val_loss, val_acc, test_acc = main(args)
     
