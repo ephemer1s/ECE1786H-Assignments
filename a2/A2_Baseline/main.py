@@ -6,17 +6,18 @@ import argparse
 import os
 from tqdm import tqdm
 from datetime import datetime
-import matplotlib.pyplot as plt
 
 try:
     from A2_Starter import *
     from Baseline import Baseline
+    from plot import *
 except:
     from A2_Baseline.A2_Starter import *
     from A2_Baseline.Baseline import Baseline
+    from A2_Baseline.plot import *
 
 
-# parse args
+# 4.3 parse args
 parser = argparse.ArgumentParser()
 parser.add_argument("-bs", "--batch_size", type=int, default=16)
 parser.add_argument("-e", "--epochs", type=int, default=50)
@@ -75,8 +76,9 @@ def main(args):
 
     train_loss = []
     val_loss = []
+    val_acc = []
 
-    # training process
+    # 4.3 training loop
     progress_bar = tqdm(range(args.epochs))
     for epoch in range(args.epochs):
 
@@ -90,45 +92,67 @@ def main(args):
             loss.backward()
             optimizer.step()
         epoch_loss /= len(train_dataloader)
-        train_loss.append(epoch_loss)
+        train_loss.append(epoch_loss)  # sum up train loss
 
-        epoch_loss = 0
-        for X_val, Y_val in validation_dataloader:  # validation
-            model.eval()
-            with torch.no_grad():
-                val_pred = model(X_val)
-            loss = loss_fn(val_pred, Y_val.float())#.item()
-            epoch_loss += loss.item()
-        epoch_loss /= len(validation_dataloader)
-        val_loss.append(epoch_loss)
 
+        # do validation per 2 epochs for speed up
+        if epoch % 2 == 0:
+            epoch_loss = 0
+            acc = 0
+            for X_val, Y_val in validation_dataloader:  # validation
+                model.eval()
+                with torch.no_grad():
+                    val_pred = model(X_val)
+                loss = loss_fn(val_pred, Y_val.float())
+                epoch_loss += loss.item()
+                
+                logit = torch.sigmoid(out)
+                Y_pred = torch.round(logit).long()
+                for i in range(args.batch_size):
+                    if Y_pred[i] == Y_val[i]:
+                        acc += 1
+            
+            epoch_loss /= len(validation_dataloader)    # len = 1600 / bs
+            val_loss.append(epoch_loss)                 # sum up val loss
+            
+            acc /= len(val_dataset)                     # len = 1600
+            val_acc.append(acc)                         # sum up val acc
+        
+        # finish epoch
         progress_bar.update(1)
  
-    # save model
+    # 4.7 save model
     if not os.path.exists('./models'):
         os.mkdir('./models')
     timestamp = datetime.now().strftime("%m%d%Y_%H%M%S")
-    savedir = './models/Baseline_lr_{}_bs_{}_epochs_{}_{}'.format(
+    savedir = './models/model_baseline_lr_{}_bs_{}_epochs_{}_{}.pt'.format(
         args.learning_rate, args.batch_size, args.epochs, timestamp)
     torch.save(model.state_dict(), savedir)
 
-    return model, train_loss, val_loss
-
-
-def draw(tloss, vloss):
-    fig = plt.figure()
-    ax = fig.subplots()
-    ax.plot(train_loss, 'r', label='Training')
-    ax.plot(val_loss, 'b', label='Validation')
-    ax.legend()
-    ax.show()    
+    # 4.5 Evaluation loop
+    model.eval()
+    test_acc = 0
+    for X_test, Y_test in test_dataloader:
+        with torch.no_grad():
+            out = model(X_test)
+        logit = torch.sigmoid(out)
+        Y_pred = torch.round(logit).long()
+        for i in range(args.batch_size):
+            if Y_pred[i] == Y_test[i]:
+                test_acc += 1
+    test_acc /= len(test_dataset)
+    
+    # 4.5 Draw curves
+    loss_fig = draw_loss(train_loss, val_loss)
+    acc_fig = draw_acc(val_acc)
+    loss_fig.savefig('./fig/loss.png')
+    acc_fig.savefig('./fig/acc.png')
+    
+    # finally, return model and losses
+    return model, train_loss, val_loss, val_acc
+    
     
     
 if __name__ == '__main__':
-    model, train_loss, val_loss = main(args)
+    model, train_loss, val_loss, val_acc = main(args)
     
-    fig = plt.figure()
-    ax = fig.subplots()
-    ax.plot(tloss, 'r', label='Training')
-    ax.plot(vloss, 'b', label='Validation')
-    ax.legend()
