@@ -48,7 +48,17 @@
 
 **Q. Provide the training loss and accuracy plot for the overfit data in your Report.**
 
+<img src="Report.assets/loss.png" style="zoom:67%;" /><img src="Report.assets/acc.png" style="zoom:67%;" />
+
 ### 4.5 Full Training Data
+
+**Q. Provide the training loss and accuracy plot in your Report.**
+
+<img src="Report.assets/nloss.png" style="zoom:67%;" /><img src="Report.assets/nacc.png" style="zoom:67%;" />
+
+**Q. Report the final test accuracy.**
+
+test_acc = 0.892
 
 **Q. Answer this questions: In the baseline model, what information contained in the original sentence is being ignored?**
 
@@ -57,3 +67,15 @@ The positional relation in between each words in the sentences is being ignored.
 ### 4.6 Extracting Meaning from the Trained Parameters
 
 **Q. Do some of the words that you generated make sense?**
+
+![image-20221008223231597](Report.assets/image-20221008223231597.png)
+
+Most of the words are adjective. They can be used to describe a movie. Most of the words make sense.
+
+### 4.8 Submit Baseline Code
+
+Please see `A2_Baseline.zip`, the instructions are in `Readme.md` in the zip.
+
+
+
+## Section 5 CNN Classifier
