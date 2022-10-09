@@ -52,6 +52,8 @@
 
 **Q. Answer this questions: In the baseline model, what information contained in the original sentence is being ignored?**
 
+The positional relation in between each words in the sentences is being ignored. In the baseline model, you will get same results by using a sentence as input and using a randomly sorted same sentence as input. And that doesn't make sense to some degree.
+
 ### 4.6 Extracting Meaning from the Trained Parameters
 
 **Q. Do some of the words that you generated make sense?**
