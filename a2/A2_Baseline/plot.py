@@ -18,3 +18,4 @@ def draw_acc(acc):
     fig = plt.figure()
     ax = fig.subplots()
     ax.plot(x=list(range(len(acc) * 2))[::2], y=acc, color='b', title='Validation Accuracy')
+    return fig
