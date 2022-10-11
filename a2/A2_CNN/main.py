@@ -25,7 +25,7 @@ parser.add_argument("-bs", "--batch_size", type=int, default=64)
 parser.add_argument("-e", "--epochs", type=int, default=50)
 parser.add_argument("-lr", "--learning_rate", type=float, default=1e-3)
 parser.add_argument("-ml", "--max_len", type=int, default=0)
-parser.add_argument("-s", "--save_model", type=bool, default=True)
+parser.add_argument("-s", "--save_model", type=bool, default=False)
 parser.add_argument("-o", "--overfit_debug", type=bool, default=False)
 parser.add_argument("-b", "--bias", type=bool, default=False)
 
@@ -234,7 +234,10 @@ def grid_search():
     
 if __name__ == '__main__':
     args = parser.parse_args()
+    print(args.grid_search)
     if args.grid_search:
+        print("Using Grid Search")
+        
         best_model, best_result, best_args = grid_search()
         
         save_results(best_result, best_args)
@@ -243,14 +246,6 @@ if __name__ == '__main__':
     else:
         train_dataloader, validation_dataloader, test_dataloader = preprocess(args)
         model, train_loss, train_acc, val_loss, val_acc, test_acc = main(args, train_dataloader, validation_dataloader, test_dataloader)
-    
-        # if args.save_model:
-            # 4.7 save model 
-            # save_model(model)
-
-            # 4.5 Draw curves
-            # draw_loss(train_loss, val_loss)
-            # draw_acc(train_acc, val_acc)
             
         # save results
         save_results([train_loss, train_acc, val_loss, val_acc, test_acc], args)

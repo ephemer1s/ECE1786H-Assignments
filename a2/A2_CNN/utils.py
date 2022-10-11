@@ -21,7 +21,7 @@ def save_results(results:list, args):
     if not os.path.exists('savedir'):
         os.mkdir(savedir)
     with open(savedir + '/result.txt', 'w') as f:
-        f.write(vars(args))
+        f.write(str(vars(args)))
         f.write('\n')
         f.write('[train_loss, train_acc, val_loss, val_acc, test_acc]')
         for metric in results:
