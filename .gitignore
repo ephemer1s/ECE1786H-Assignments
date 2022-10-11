@@ -7,5 +7,5 @@ __MACOSX/
 models/
 *.pdf
 fig/
-result/
+results/
 *.old
