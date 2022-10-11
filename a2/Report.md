@@ -90,7 +90,21 @@ Final Test Accuracy using Overfitting Dataset: 0.837
 
 #### 5.2.1 Tuning and Model
 
+In this section and the following section, Grid Search is used in tuning the model hyperparameters. By using `python A2_CNN/main.py -g 1 -f 1`, Grid Search method is used and normal arguments are blocked. Argument from `A2_CNN/gs_args.json` is imported instead. 
+
+When using Grid Search, the parameters tuned are $k_1$, $k_2$, $n_1$, $n_2$ and $lr$ (learning rate). We assume that $k_1 \leq k_2$ to cut off abundant cases.  And we use 30 epochs, validate the model per 3 epochs to save tuning time. Normally, the tuning time on RTX 2060 GPU will be 30 seconds per cases.
+
+The model achieved **best test accuracy of %** with the following params: $[k_1, k_2, n_1, n_2, lr] = []$.
+
+The curves are as follows:
+
+
+
 #### 5.2.2 Unfreeze Embedding
+
+Using `python A2_CNN/main.py -g 0 -f 0 -s 1` to train unfreezed model.
+
+The accuracy is 
 
 ### 5.3 Extracting Meaning from Kernels
 
