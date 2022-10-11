@@ -3,7 +3,7 @@ from torch import nn
 
 
 class Conv2dWordClassifier(nn.Module):
-    def __init__(self, vocab, args, fc_bias=True):
+    def __init__(self, vocab, args):
         super().__init__()
 
         self.k1 = (args.k1, 100)                        # rectan kernel size (k * 100), parallel to (N * d)
@@ -34,7 +34,7 @@ class Conv2dWordClassifier(nn.Module):
             nn.AdaptiveMaxPool2d(output_size=(1, 1)),               # kernel_size = input_size
         )
 
-        self.linear = nn.Linear(self.linear_input_size, 1, bias=fc_bias)
+        self.linear = nn.Linear(self.linear_input_size, 1, bias=args.bias)
         self.sigmoid = nn.Sigmoid()
 
         return
@@ -49,4 +49,4 @@ class Conv2dWordClassifier(nn.Module):
         out = self.linear(cat.squeeze())                        # (bs, 1)
         logit = self.sigmoid(out)
         
-        return out, logit
+        return out.squeeze(), logit.squeeze()
