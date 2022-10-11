@@ -9,3 +9,4 @@ models/
 fig/
 results/
 *.old
+__pycache__/
