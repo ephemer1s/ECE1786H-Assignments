@@ -7,3 +7,4 @@ __MACOSX/
 models/
 *.pdf
 fig/
+*.old
