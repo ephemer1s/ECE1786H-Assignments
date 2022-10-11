@@ -11,7 +11,7 @@ def draw_loss(tloss, vloss):
     ax.plot(list(range(len(tloss)))[::2], vloss, color='b', label='Validation')
     ax.legend()
     ax.set_title('Train loss vs. Val loss')
-    plt.savefig('./fig/loss.png')
+    plt.savefig('.A2_Baseline/fig/loss.png')
     return fig
 
 def draw_acc(acc):
@@ -19,5 +19,5 @@ def draw_acc(acc):
     ax = fig.subplots()
     ax.plot(list(range(len(acc) * 2))[::2], acc, color='b')
     ax.set_title('Validation Accuracy')
-    plt.savefig('./fig/acc.png')
+    plt.savefig('.A2_Baseline/fig/acc.png')
     return fig

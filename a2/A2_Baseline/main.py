@@ -146,16 +146,16 @@ def main(args):
     
     # 4.7 save model
     if args.save_model:
-        if not os.path.exists('./models'):
-            os.mkdir('./models')
+        if not os.path.exists('.A2_Baseline/models'):
+            os.mkdir('.A2_Baseline/models')
         timestamp = datetime.now().strftime("%m%d%Y_%H%M%S")
-        savedir = './models/model_baseline_lr_{}_bs_{}_epochs_{}_{}.pt'.format(
+        savedir = '.A2_Baseline/models/model_baseline_lr_{}_bs_{}_epochs_{}_{}.pt'.format(
             args.learning_rate, args.batch_size, args.epochs, timestamp)
         torch.save(model.state_dict(), savedir)
 
     # 4.5 Draw curves
-    if not os.path.exists('./fig'):
-        os.mkdir('./fig')
+    if not os.path.exists('.A2_Baseline/fig'):
+        os.mkdir('.A2_Baseline/fig')
     draw_loss(train_loss, val_loss)
     draw_acc(val_acc)
     

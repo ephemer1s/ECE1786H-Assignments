@@ -1,5 +1,6 @@
 .vector_cache/
-Report.assets/
+# a1/Report.assets/
+a2/Report.assets/
 Readme.assets/
 *.pyc
 *.zip
