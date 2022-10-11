@@ -134,9 +134,20 @@ From these set of words, we can infer that each kernels learned different patter
 
 ### 6.1 Run and Compare
 
-> Run your two best stored models on 4 sentences that you come up with yourself, where two of the sentences are definitely objective/subjective, and the other two are borderline subjective/objective, according to your opinion. Include the input and output in your write up. 
->
-> Comment on how the two models performed and whether they are behaving as you expected. Do they agree with each other? Which model seems to be performing the best?
+#### Models used:
 
+* **model 1:** $[k_1, k_2, n_1, n_2] = [2, 4, 4, 16]$, unfrozen. Accuracy: 91.15%
+* **model 2:** $[k_1, k_2, n_1, n_2] = [2, 5, 16, 32]$, unfrozen. Accuracy: 91.8%
 
+#### Examples and Results:
 
+* **Strong Subjective:** I think this course has too much workload in assignments. 
+  * All correct. Model that have accuracy above 90% shouldn't make mistake on this strong cases.
+* **Weak Subjective:** Jollibee has the best fried chicken in Toronto that I have ever seen.
+  * All correct. Actually I'm not sure if this sentence is subjective. But as the models both agree that this is subjective, I will listen to them.
+* **Weak Objective:** "I think this sentence is objective" is not an objective sentence.
+  * Model 2 correct. This is a tricky one. "I think" makes the kernel goes to subjective side. Model 2 makes the correct prediction while model 1 is baited.
+* **Strong Objective:** The Roman Empire falls in the year 1453 A.D.
+  * All correct. Model that have accuracy above 90% shouldn't make mistake on this strong cases.
+
+To conclude, the model 2 performs best among all the current and previous models. It gives the correct prediction on the very tricky "Weak Objective" example, and has the best accuracy on the test dataset.
