@@ -5,14 +5,15 @@
         "max_len": 0,
         "overfit_debug": 0,
         "bias": 0,
-        "freeze_embedding": 0
+        "freeze_embedding": 1,
+        "val_epoch": 3
     },
 
     "grid_args":{
-        "learning_rate": [1e-3],
-        "k1": [2, 4],
-        "k2": [2, 4],
-        "n1": [4, 8],
-        "n2": [4, 8, 16]
+        "learning_rate": [5e-3, 1e-3, 2e-4],
+        "k1": [2, 3, 4, 5],
+        "k2": [2, 3, 4, 5],
+        "n1": [2, 4, 8, 16],
+        "n2": [2, 4, 8, 16, 32]
     }
 }
