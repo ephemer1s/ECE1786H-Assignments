@@ -1,3 +1,4 @@
+import math
 import torch
 import torchtext
 import argparse
@@ -21,10 +22,10 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-bs", "--batch_size", type=int, default=16)
 parser.add_argument("-e", "--epochs", type=int, default=50)
 parser.add_argument("-lr", "--learning_rate", type=float, default=1e-3)
-# parser.add_argument("-ml", "--max_len", type=int, default=0)
+parser.add_argument("-ml", "--max_len", type=int, default=0)
 parser.add_argument("-s", "--save_model", type=bool, default=True)
 parser.add_argument("-o", "--overfit_debug", type=bool, default=False)
-# parser.add_argument("-b", "--bias", type=bool, default=False)
+parser.add_argument("-b", "--bias", type=bool, default=False)
 
 # added in 5.2
 parser.add_argument("-k1", "--k1", type=int, default=2)
@@ -89,9 +90,13 @@ def main(args):
     train_loss = []
     val_loss = []
     val_acc = []
+    
+    # set up progress bar
+    num_iters = args.epochs * math.ceil(len(train_dataset) / args.batch_size) \
+        + args.epochs // 2 * math.ceil(len(train_dataset) / args.batch_size)
+    progress_bar = tqdm(range(int(num_iters)))
 
     # 5.2 training loop, transplanted from 4.3 training loop
-    progress_bar = tqdm(range(args.epochs))
     for epoch in range(args.epochs):
 
         epoch_loss = 0
@@ -103,6 +108,8 @@ def main(args):
             epoch_loss += loss.item()
             loss.backward()
             optimizer.step()
+            progress_bar.update(1)
+            
         epoch_loss /= len(train_dataloader)
         train_loss.append(epoch_loss)  # sum up train loss
 
@@ -122,15 +129,16 @@ def main(args):
                 for i in range(args.batch_size):
                     if Y_pred[i] == Y_val[i]:
                         acc += 1
-            
+                        
+                progress_bar.update(1)
+                
             epoch_loss /= len(validation_dataloader)    # len = 1600 / bs
             val_loss.append(epoch_loss)                 # sum up val loss
             
             acc /= len(val_dataset)                     # len = 1600
             val_acc.append(acc)                         # sum up val acc
         
-        # finish epoch
-        progress_bar.update(1)
+    # finish epoch
  
     # 4.5 Evaluation loop
     model.eval()
