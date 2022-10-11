@@ -13,37 +13,54 @@ def save_model(model):
     return torch.save(model.state_dict(), savedir)
     
     
-def save_results(results:list):
+def save_results(results:list, args):
+    timestamp = datetime.now().strftime("%m%d%Y_%H%M%S")
     if not os.path.exists('./results'):
         os.mkdir('./results')
-    timestamp = datetime.now().strftime("%m%d%Y_%H%M%S")
-    savedir = './results/cnn_{}.pt'.format(timestamp)
-    # TODO: save results
-    pass
-    
-    
-def save_args(args):
-    # TODO: save args
-    pass
+    savedir = './results/cnn_{}'.format(timestamp)
+    if not os.path.exists('savedir'):
+        os.mkdir(savedir)
+    with open(savedir + '/result.txt', 'w') as f:
+        f.write(vars(args))
+        f.write('\n')
+        f.write('[train_loss, train_acc, val_loss, val_acc, test_acc]')
+        for metric in results:
+            f.write(f"{metric}\n")
+            f.write('\n')
+    draw_loss(results[0], results[2], savedir)
+    draw_acc(results[1], results[3], savedir)
+    return
 
 
-def draw_loss(tloss, vloss):
+def draw_loss(tloss, vloss, dir=None):
+    if dir == None:
+        savedir = './fig'
+    else:
+        savedir = dir + '/fig'
+    if not os.path.exists(savedir):
+        os.mkdir(savedir)
     fig = plt.figure()
     ax = fig.subplots()
     ax.plot(list(range(len(tloss))), tloss, color='r', label='Training')
-    ax.plot(list(range(len(tloss)))[::2], vloss, color='b', label='Validation')
+    ax.plot(list(range(len(tloss)))[::5], vloss, color='b', label='Validation')
     ax.legend()
     ax.set_title('Train loss vs. Val loss')
-    plt.savefig('./fig/loss.png')
+    plt.savefig(savedir + '/loss.png')
     return fig
 
 
-def draw_acc(tacc, vacc):
+def draw_acc(tacc, vacc, dir=None):
+    if dir == None:
+        savedir = './fig'
+    else:
+        savedir = dir + '/fig'
+    if not os.path.exists(savedir):
+        os.mkdir(savedir)
     fig = plt.figure()
     ax = fig.subplots()
     ax.plot(list(range(len(tacc))), tacc, color='r', label='Training')
-    ax.plot(list(range(len(tacc)))[::2], vacc, color='b', label='Validation')
+    ax.plot(list(range(len(tacc)))[::5], vacc, color='b', label='Validation')
     ax.legend()
     ax.set_title('Accuracy')
-    plt.savefig('./fig/acc.png')
+    plt.savefig(savedir + '/acc.png')
     return fig

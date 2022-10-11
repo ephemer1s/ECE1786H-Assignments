@@ -1,0 +1,18 @@
+{
+    "default_args":{
+        "batch_size": 64, 
+        "epochs": 30,
+        "max_len": 0,
+        "overfit_debug": 0,
+        "bias": 0,
+        "freeze_embedding": 0
+    },
+
+    "grid_args":{
+        "learning_rate": [1e-3],
+        "k1": [2, 4],
+        "k2": [2, 4],
+        "n1": [4, 8],
+        "n2": [4, 8, 16]
+    }
+}
