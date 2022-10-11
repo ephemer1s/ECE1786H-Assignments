@@ -38,10 +38,12 @@ def draw_loss(tloss, vloss):
     return fig
 
 
-def draw_acc(acc):
+def draw_acc(tacc, vacc):
     fig = plt.figure()
     ax = fig.subplots()
-    ax.plot(list(range(len(acc) * 2))[::2], acc, color='b')
-    ax.set_title('Validation Accuracy')
+    ax.plot(list(range(len(tacc))), tacc, color='r', label='Training')
+    ax.plot(list(range(len(tacc)))[::2], vacc, color='b', label='Validation')
+    ax.legend()
+    ax.set_title('Accuracy')
     plt.savefig('./fig/acc.png')
     return fig

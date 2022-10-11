@@ -88,31 +88,42 @@ def main(args):
     optimizer=torch.optim.Adam(params=model.parameters(), lr=args.learning_rate)
 
     train_loss = []
+    train_acc = []
     val_loss = []
     val_acc = []
     
     # set up progress bar
     num_iters = args.epochs * math.ceil(len(train_dataset) / args.batch_size) \
-        + args.epochs // 2 * math.ceil(len(train_dataset) / args.batch_size)
+        + args.epochs // 2 * math.ceil(len(val_dataset) / args.batch_size)
     progress_bar = tqdm(range(int(num_iters)))
 
     # 5.2 training loop, transplanted from 4.3 training loop
     for epoch in range(args.epochs):
 
         epoch_loss = 0
+        acc = 0
         for X_train, Y_train in train_dataloader:  # train
             model.train()
             optimizer.zero_grad()
             out, logit = model(X_train)
             loss = loss_fn(out, Y_train.float())
             epoch_loss += loss.item()
+
+            Y_pred = torch.round(logit).long()
+            # print(Y_pred.shape, Y_train.shape)
+            for i in range(min(args.batch_size, len(Y_pred))):
+                if Y_pred[i] == Y_train[i]:
+                    acc += 1
+                        
             loss.backward()
             optimizer.step()
             progress_bar.update(1)
             
         epoch_loss /= len(train_dataloader)
         train_loss.append(epoch_loss)  # sum up train loss
-
+        
+        acc /= len(train_dataset)                   # len = 6400
+        train_acc.append(acc)                       # sum up val acc
 
         # do validation per 2 epochs for speed up
         if epoch % 2 == 0:
@@ -155,22 +166,22 @@ def main(args):
     
     # 4.7 save model
     if args.save_model:
-        save_model(model, args)
+        save_model(model)
 
     # 4.5 Draw curves
     if not os.path.exists('./fig'):
         os.mkdir('./fig')
     draw_loss(train_loss, val_loss)
-    draw_acc(val_acc)
+    draw_acc(train_acc, val_acc)
     
     # 5.2.1 
     
     # finally, return model and losses
-    return model, train_loss, val_loss, val_acc, test_acc
+    return model, train_loss, train_acc, val_loss, val_acc, test_acc
     
 
     
 if __name__ == '__main__':
     args = parser.parse_args()
-    model, train_loss, val_loss, val_acc, test_acc = main(args)
+    model, train_loss, train_acc, val_loss, val_acc, test_acc = main(args)
     
