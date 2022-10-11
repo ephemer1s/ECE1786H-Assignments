@@ -79,3 +79,20 @@ Please see `A2_Baseline.zip`, the instructions are in `Readme.md` in the zip.
 
 
 ## Section 5 CNN Classifier
+
+### 5.1 Overfit
+
+<img src="Report.assets/loss-1665470381421.png" alt="loss" style="zoom:67%;" /><img src="Report.assets/acc-1665470381420.png" alt="acc" style="zoom:67%;" />
+
+Final Test Accuracy using Overfitting Dataset: 0.837
+
+### 5.2 Training and Parameter Exploration
+
+#### 5.2.1 Tuning and Model
+
+#### 5.2.2 Unfreeze Embedding
+
+### 5.3 Extracting Meaning from Kernels
+
+## Section 6 Gradio
+
