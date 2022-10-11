@@ -26,7 +26,7 @@ parser.add_argument("-k1", "--k1", type=int, default=2)
 parser.add_argument("-n1", "--n1", type=int, default=10)
 parser.add_argument("-k2", "--k2", type=int, default=4)
 parser.add_argument("-n2", "--n2", type=int, default=10)
-parser.add_argument("-f", "--freeze_embedding", type=bool, default=True)
+parser.add_argument("-f", "--freeze_embedding", type=bool, default=False)
 parser.add_argument("-g", "--grid_search", type=bool, default=False)
 parser.add_argument("-v", "--val_epoch", type=int, default=2)
 

@@ -32,7 +32,7 @@ Same as A2_Baseline, There should be a folder called A2_CNN after unzip the file
 
 * `Classifier.py` - Defines the CNN model.
 
-* `ext_meaning.py` - Extract the meanings from trained model's linear layer. Which is used in P5.3. 
+* `ext_meaning.py` - Extract the meanings from trained model's linear layer. Which is used in P5.3 and section 6. 
 
   Usage: `python ./A2_Baseline/ext_meaning.py`
 
@@ -48,30 +48,35 @@ Same as A2_Baseline, There should be a folder called A2_CNN after unzip the file
 
 ## Parsers
 
-in `main.py`:
+All Boolean type arguments are default False. For instance, use `-f 1` to switch `-f` to True.
 
 ```python
 parser.add_argument("-bs", "--batch_size", type=int, default=16)
 parser.add_argument("-e", "--epochs", type=int, default=50)
 parser.add_argument("-lr", "--learning_rate", type=float, default=1e-3)
 parser.add_argument("-ml", "--max_len", type=int, default=0)
-parser.add_argument("-s", "--save_model", type=bool, default=True)
+parser.add_argument("-s", "--save_model", type=bool, default=False)
 parser.add_argument("-o", "--overfit_debug", type=bool, default=False)
 
 parser.add_argument("-k1", "--k1", type=int, default=2)
 parser.add_argument("-n1", "--n1", type=int, default=10)
 parser.add_argument("-k2", "--k2", type=int, default=4)
 parser.add_argument("-n2", "--n2", type=int, default=10)
-parser.add_argument("-f", "--freeze_embedding", type=bool, default=True)
+parser.add_argument("-f", "--freeze_embedding", type=bool, default=False)
 parser.add_argument("-g", "--grid_search", type=bool, default=False)
 parser.add_argument("-v", "--val_epoch", type=int, default=2)
 ```
 
 * `-bs`: batch size
+
 * `-e`: training epochs
+
 * `-lr`: learning rate for Adam optimizer
+
 * `-ml`: maximum length for padding indexed sentences in lambda function.
+
 * `-s`: whether to save the model into the `./model` directory. Models won't overlap since timestamps are included in the file name.
+
 * `-o`: whether to use overfit dataset to train the model. 
 
 * `-k1`, `-n1`, `-k2`, `-n2`: CNN structure parameters.
