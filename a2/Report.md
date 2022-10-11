@@ -92,21 +92,51 @@ Final Test Accuracy using Overfitting Dataset: 0.837
 
 In this section and the following section, Grid Search is used in tuning the model hyperparameters. By using `python A2_CNN/main.py -g 1 -f 1`, Grid Search method is used and normal arguments are blocked. Argument from `A2_CNN/gs_args.json` is imported instead. 
 
-When using Grid Search, the parameters tuned are $k_1$, $k_2$, $n_1$, $n_2$ and $lr$ (learning rate). We assume that $k_1 \leq k_2$ to cut off abundant cases.  And we use 30 epochs, validate the model per 3 epochs to save tuning time. Normally, the tuning time on RTX 2060 GPU will be 30 seconds per cases.
+When using Grid Search, the parameters tuned are $k_1$, $k_2$, $n_1$, $n_2$ and $lr$ (learning rate). We assume that $k_1 \leq k_2$ to cut off abundant cases.  And we use 30 epochs, validate the model per 3 epochs to save tuning time. Normally, the tuning time on RTX 2060 GPU will be 30~60 seconds per cases.
 
-The model achieved **best test accuracy of %** with the following params: $[k_1, k_2, n_1, n_2, lr] = []$.
+The model achieved **best test accuracy of 91.45%** with the following params: $[k_1, k_2, n_1, n_2, lr] = [2, 4, 4, 16, 0.0002]$.
 
 The curves are as follows:
 
-
+<img src="Report.assets/loss-1665522015023.png" alt="loss" style="zoom:67%;" /><img src="Report.assets/acc-1665522021533.png" alt="loss" style="zoom:67%;" />
 
 #### 5.2.2 Unfreeze Embedding
 
-Using `python A2_CNN/main.py -g 0 -f 0 -s 1` to train unfreezed model.
+Using `python A2_CNN/main.py -s 1` to train unfrozen model.
 
-The accuracy is 
+The accuracy is 91.15%. Which is slightly lesser than model with unfrozen embedding layer.
 
 ### 5.3 Extracting Meaning from Kernels
 
+Firstly, I think it remains a question whether each kernels from different convolution networks are weighted equal or weighted by the portion of the kernel in its network.
+
+As we calculated the 5 closest words of each of the 72 kernels, we added up all the similarity value of the top words.
+
+The result shows the top 5 closest words to all 72 kernels and their scores are
+
+```python
+('abducted', 2.3963323), 
+('flees', 2.4324336), 
+('fiancée', 2.475415), 
+('chintzy', 2.828094), 
+('fiancé', 3.478285)
+```
+
+Which seems like it doesn't make sense.
+
+While we look into the kernels separately, we found that each kernel has different set of closest words indicating different categories.
+
+![image-20221011172623111](Report.assets/image-20221011172623111.png)![image-20221011172638675](Report.assets/image-20221011172638675.png)![image-20221011172650511](Report.assets/image-20221011172650511.png)![image-20221011172712397](Report.assets/image-20221011172712397.png)
+
+From these set of words, we can infer that each kernels learned different pattern of words that can determine the subjectivity of all sentences, or at least, some sentences.
+
 ## Section 6 Gradio
+
+### 6.1 Run and Compare
+
+> Run your two best stored models on 4 sentences that you come up with yourself, where two of the sentences are definitely objective/subjective, and the other two are borderline subjective/objective, according to your opinion. Include the input and output in your write up. 
+>
+> Comment on how the two models performed and whether they are behaving as you expected. Do they agree with each other? Which model seems to be performing the best?
+
+
 
