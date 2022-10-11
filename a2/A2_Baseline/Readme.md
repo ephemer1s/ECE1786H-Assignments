@@ -60,3 +60,7 @@ parser.add_argument("-o", "--overfit_debug", type=bool, default=False)
 * `-ml`: maximum length for padding indexed sentences in lambda function.
 * `-s`: whether to save the model into the `./model` directory. Models won't overlap since timestamps are included in the file name.
 * `-o`: whether to use overfit dataset to train the model. 
+
+## Issues
+
+Please contact haocheng.wei@mail.utoronto.ca if there are any issues regarding the codes.
