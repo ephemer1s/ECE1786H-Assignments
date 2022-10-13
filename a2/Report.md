@@ -48,13 +48,13 @@
 
 **Q. Provide the training loss and accuracy plot for the overfit data in your Report.**
 
-<img src="Report.assets/loss.png" style="zoom:67%;" /><img src="Report.assets/acc.png" style="zoom:67%;" />
+<img src="Report.assets/loss.png" style="zoom: 40%;" /><img src="Report.assets/acc.png" style="zoom:40%;" />
 
 ### 4.5 Full Training Data
 
 **Q. Provide the training loss and accuracy plot in your Report.**
 
-<img src="Report.assets/nloss.png" style="zoom:67%;" /><img src="Report.assets/nacc.png" style="zoom:67%;" />
+<img src="Report.assets/nloss.png" style="zoom: 40%;" /><img src="Report.assets/nacc.png" style="zoom:40%;" />
 
 **Q. Report the final test accuracy.**
 
@@ -68,7 +68,7 @@ The positional relation in between each words in the sentences is being ignored.
 
 **Q. Do some of the words that you generated make sense?**
 
-![image-20221008223231597](Report.assets/image-20221008223231597.png)
+<img src="Report.assets/image-20221008223231597.png" alt="image-20221008223231597" style="zoom:50%;" />
 
 Most of the words are adjective. They can be used to describe a movie. Most of the words make sense.
 
@@ -82,7 +82,7 @@ Please see `A2_Baseline.zip`, the instructions are in `Readme.md` in the zip.
 
 ### 5.1 Overfit
 
-<img src="Report.assets/loss-1665470381421.png" alt="loss" style="zoom:67%;" /><img src="Report.assets/acc-1665470381420.png" alt="acc" style="zoom:67%;" />
+<img src="Report.assets/loss-1665470381421.png" alt="loss" style="zoom:40%;" /><img src="Report.assets/acc-1665470381420.png" alt="acc" style="zoom:40%;" />
 
 Final Test Accuracy using Overfitting Dataset: 0.837
 
@@ -98,7 +98,7 @@ The model achieved **best test accuracy of 91.45%** with the following params: $
 
 The curves are as follows:
 
-<img src="Report.assets/loss-1665522015023.png" alt="loss" style="zoom:67%;" /><img src="Report.assets/acc-1665522021533.png" alt="loss" style="zoom:67%;" />
+<img src="Report.assets/loss-1665522015023.png" alt="loss" style="zoom:40%;" /><img src="Report.assets/acc-1665522021533.png" alt="loss" style="zoom:40%;" />
 
 #### 5.2.2 Unfreeze Embedding
 
@@ -126,7 +126,7 @@ Which seems like it doesn't make sense.
 
 While we look into the kernels separately, we found that each kernel has different set of closest words indicating different categories.
 
-![image-20221011172623111](Report.assets/image-20221011172623111.png)![image-20221011172638675](Report.assets/image-20221011172638675.png)![image-20221011172650511](Report.assets/image-20221011172650511.png)![image-20221011172712397](Report.assets/image-20221011172712397.png)
+<img src="Report.assets/image-20221011172623111.png" style="zoom:50%;" /><img src="Report.assets/image-20221011172638675.png" style="zoom:50%;" /><img src="Report.assets/image-20221011172650511.png" style="zoom:50%;" /><img src="Report.assets/image-20221011172712397.png" style="zoom:50%;" />
 
 From these set of words, we can infer that each kernels learned different pattern of words that can determine the subjectivity of all sentences, or at least, some sentences.
 
