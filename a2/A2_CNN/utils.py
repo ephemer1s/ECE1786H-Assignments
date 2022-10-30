@@ -39,11 +39,10 @@ def draw_loss(tloss, vloss, epv, dir=None):
         savedir = dir + '/fig'
     if not os.path.exists(savedir):
         os.mkdir(savedir)
-    fig = plt.figure()
-    ax = fig.subplots()
-    ax.plot(list(range(len(tloss))), tloss, color='r', label='Training')
-    ax.plot(list(range(len(tloss)))[::epv], vloss, color='b', label='Validation')
-    ax.legend()
+        
+    fig, axs = plt.subplots(1, 2, figsize=(9, 3))
+    axs[0].plot(list(range(len(tloss))), tloss)
+    axs[1].plot(list(range(len(tloss)))[::epv], vloss)
     ax.set_title('Train loss vs. Val loss')
     plt.savefig(savedir + '/loss.png')
     return fig
@@ -56,10 +55,12 @@ def draw_acc(tacc, vacc, epv, dir=None):
         savedir = dir + '/fig'
     if not os.path.exists(savedir):
         os.mkdir(savedir)
+        
+        
     fig = plt.figure()
     ax = fig.subplots()
-    ax.plot(list(range(len(tacc))), tacc, color='r', label='Training')
-    ax.plot(list(range(len(tacc)))[::epv], vacc, color='b', label='Validation')
+    ax.plot(list(range(len(tacc))), tacc)
+    ax.plot(list(range(len(tacc)))[::epv], vacc)
     ax.legend()
     ax.set_title('Accuracy')
     plt.savefig(savedir + '/acc.png')

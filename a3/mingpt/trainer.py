@@ -9,6 +9,7 @@ from collections import defaultdict
 import torch
 from torch.utils.data.dataloader import DataLoader
 from mingpt.utils import CfgNode as CN
+from torch.nn import functional as F
 
 class Trainer:
 
@@ -51,6 +52,11 @@ class Trainer:
         self.iter_dt = 0.0
 
         self.downstream_finetune=downstream_finetune
+        
+        self.train_loss = []
+        self.val_loss = []
+        self.train_acc = []
+        self.val_acc = []
 
     def add_callback(self, onevent: str, callback):
         self.callbacks[onevent].append(callback)
@@ -68,47 +74,152 @@ class Trainer:
         # setup the optimizer
         self.optimizer = model.configure_optimizers(config)
 
-        # setup the dataloader
-        train_loader = DataLoader(
-            self.train_dataset,
-            sampler=torch.utils.data.RandomSampler(self.train_dataset, replacement=True, num_samples=int(1e10)),
-            shuffle=False,
-            pin_memory=False,
-            batch_size=config.batch_size,
-            num_workers=config.num_workers,
-            collate_fn=lambda batch: self.collate_fn(batch, self.device)
-        )
+        if self.downstream_finetune:
+            train_loader = DataLoader(
+                self.train_dataset,
+                sampler=torch.utils.data.RandomSampler(self.train_dataset, replacement=True, num_samples=int(1e10)),
+                shuffle=False,
+                pin_memory=False,
+                batch_size=config.batch_size,
+                num_workers=config.num_workers,
+                collate_fn=lambda batch: self.collate_fn(batch, self.device)
+            )
+            
+            val_loader = DataLoader(
+                self.validation_dataset,
+                sampler=torch.utils.data.RandomSampler(self.validation_dataset, replacement=True, num_samples=int(1e10)),
+                shuffle=False,
+                pin_memory=False,
+                batch_size=config.batch_size,
+                num_workers=config.num_workers,
+                collate_fn=lambda batch: self.collate_fn(batch, self.device)
+            )
+            
+            self.iter_num = 0
+            self.iter_time = time.time()
+            data_iter = iter(train_loader)
+            val_iter = iter(val_loader)
+            
+            while True:
+                # =================
+                # Train prog
+                # =================
+                model.train()
+                
+                try:
+                    batch = next(data_iter)
+                except StopIteration:
+                    data_iter = iter(train_loader)
+                    batch = next(data_iter)
+                batch = [t.to(self.device) for t in batch]
+                x, y = batch
+                
+                # forward the model
+                logits, self.loss = model(x, y, self.downstream_finetune)
 
-        model.train()
-        self.iter_num = 0
-        self.iter_time = time.time()
-        data_iter = iter(train_loader)
-        while True:
+                self.acc = 0
+                probs = F.softmax(logits, dim=-1)
+                ypred = torch.argmax(probs, dim=1)
+                # print(probs, ypred, y)
+                for y0, yp in zip(y, ypred):
+                    if y0 == yp:
+                        self.acc += 1
+                self.acc /= y.shape[0]
+                
+            
+                # backprop and update the parameters
+                model.zero_grad(set_to_none=True)
+                self.loss.backward()
+                torch.nn.utils.clip_grad_norm_(model.parameters(), config.grad_norm_clip)
+                self.optimizer.step()
 
-            # fetch the next batch (x, y) and re-init iterator if needed
-            try:
-                batch = next(data_iter)
-            except StopIteration:
-                data_iter = iter(train_loader)
-                batch = next(data_iter)
-            batch = [t.to(self.device) for t in batch]
-            x, y = batch
 
-            # forward the model
-            logits, self.loss = model(x, y, self.downstream_finetune)
+                # =================
+                # Validation prog
+                # =================
+                model.eval()
+                
+                try:
+                    batch = next(val_iter)
+                except StopIteration:
+                    val_iter = iter(val_loader)
+                    batch = next(val_iter)
+                batch = [t.to(self.device) for t in batch]
+                x, y = batch
+                
+                with torch.no_grad():
+                    # forward the model
+                    logits, self.vloss = model(x, y, self.downstream_finetune)
+                
+                self.vacc = 0
+                probs = F.softmax(logits, dim=-1)
+                ypred = torch.argmax(probs, dim=1)
+                # print(probs, ypred, y)
+                for y0, yp in zip(y, ypred):
+                    if y0 == yp:
+                        self.vacc += 1
+                self.vacc /= y.shape[0]
+                
+                # =================
+                # Postprocess prog
+                # =================
+                self.train_acc.append(self.acc)
+                self.train_loss.append(self.loss.item())
+                self.val_acc.append(self.vacc)
+                self.val_loss.append(self.vloss.item())
+                
+                self.trigger_callbacks('on_batch_end')
+                self.iter_num += 1
+                tnow = time.time()
+                self.iter_dt = tnow - self.iter_time
+                self.iter_time = tnow
 
-            # backprop and update the parameters
-            model.zero_grad(set_to_none=True)
-            self.loss.backward()
-            torch.nn.utils.clip_grad_norm_(model.parameters(), config.grad_norm_clip)
-            self.optimizer.step()
+                # termination conditions
+                if config.max_iters is not None and self.iter_num >= config.max_iters:
+                    break
 
-            self.trigger_callbacks('on_batch_end')
-            self.iter_num += 1
-            tnow = time.time()
-            self.iter_dt = tnow - self.iter_time
-            self.iter_time = tnow
+        else:
+            # setup the dataloader
+            train_loader = DataLoader(
+                self.train_dataset,
+                sampler=torch.utils.data.RandomSampler(self.train_dataset, replacement=True, num_samples=int(1e10)),
+                shuffle=False,
+                pin_memory=False,
+                batch_size=config.batch_size,
+                num_workers=config.num_workers,
+                collate_fn=lambda batch: self.collate_fn(batch, self.device)
+            )
 
-            # termination conditions
-            if config.max_iters is not None and self.iter_num >= config.max_iters:
-                break
+            model.train()
+            self.iter_num = 0
+            self.iter_time = time.time()
+            data_iter = iter(train_loader)
+            while True:
+
+                # fetch the next batch (x, y) and re-init iterator if needed
+                try:
+                    batch = next(data_iter)
+                except StopIteration:
+                    data_iter = iter(train_loader)
+                    batch = next(data_iter)
+                batch = [t.to(self.device) for t in batch]
+                x, y = batch
+
+                # forward the model
+                logits, self.loss = model(x, y, self.downstream_finetune)
+            
+                # backprop and update the parameters
+                model.zero_grad(set_to_none=True)
+                self.loss.backward()
+                torch.nn.utils.clip_grad_norm_(model.parameters(), config.grad_norm_clip)
+                self.optimizer.step()
+
+                self.trigger_callbacks('on_batch_end')
+                self.iter_num += 1
+                tnow = time.time()
+                self.iter_dt = tnow - self.iter_time
+                self.iter_time = tnow
+
+                # termination conditions
+                if config.max_iters is not None and self.iter_num >= config.max_iters:
+                    break
