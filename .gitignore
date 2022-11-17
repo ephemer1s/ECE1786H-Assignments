@@ -11,3 +11,4 @@ fig/
 results/
 *.old
 __pycache__/
+a4/distilbert-base-uncased-finetuned-squad/
